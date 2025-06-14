@@ -55,7 +55,17 @@ struct Config {
             result ~= ["-p", port.text];
         result ~= user ? "%s@%s".format(user, host) : host;
         result ~= [ "cd", cwd, ";" ];
-        result ~= [ "git" ]~args;
+        result ~= [ "git" ];
+        argloop: foreach(arg; args) {
+            foreach(c; arg) {
+                if (c == ' ') {
+                    result ~= "\"%s\"".format(arg);
+                    continue argloop;
+                }
+            }
+
+            result ~= arg;
+        }
         return result;
     }
 }
