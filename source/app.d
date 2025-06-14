@@ -72,12 +72,19 @@ Config getConfig(SDLNode[] nodes) {
 
     foreach(node; nodes) {
         switch(node.name) {
+
             case "host":
                 result.host = cast(string)(node.values[0]);
                 break;
+
             case "user":
                 result.user = cast(string)(node.values[0]);
                 break;
+
+            case "cwd":
+                result.cwd = cast(string)(node.values[0]);
+                break;
+
             case "port":
                 result.port = cast(ushort)(cast(long)node.values[0]);
                 break;
