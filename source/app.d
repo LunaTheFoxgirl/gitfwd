@@ -16,7 +16,7 @@ int main(string[] args) {
         }
 
         if (!config.host) {
-            if (environment.get("GITFWD_FALLBACK", "1")) {
+            if (environment.get("GITFWD_FALLBACK", "0") == "1") {
                 Pid pid = spawnProcess(["git"]~args[1..$]);
                 return pid.wait();
             }
@@ -34,15 +34,16 @@ int main(string[] args) {
 struct Config {
     string user;
     string host;
+    string cwd = ".";
     ushort port = 22;
 
     static Config fromEnvVars() {
         import std.conv : to;
 
         Config result;
-        result.host = environment.get("GIFWD_HOST");
-        result.user = environment.get("GIFWD_USER");
-        result.port = environment.get("GIFWD_PORT", "22").to!ushort;
+        result.host = environment.get("GITFWD_HOST");
+        result.user = environment.get("GITFWD_USER");
+        result.port = environment.get("GITFWD_PORT", "22").to!ushort;
         return result;
     }
 
@@ -55,8 +56,8 @@ struct Config {
         if (port != 22)
             result ~= ["-p", port.text];
         result ~= user ? "%s@%s".format(user, host) : host;
-        result ~= "git";
-        result ~= args;
+        result ~= [ "cd", cwd, ";" ];
+        result ~= [ "git" ]~args;
         return result;
     }
 }
