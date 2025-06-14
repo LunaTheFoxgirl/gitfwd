@@ -1,0 +1,5 @@
+// Rename to gitfwd, and put it in the working directory of your git project.
+
+host "myServer"
+user "myAccount"
+port 24
