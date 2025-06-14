@@ -10,10 +10,7 @@ int main(string[] args) {
         if (exists("gitfwd.sdl")) {
             config = getConfig(parseSDL("gitfwd.sdl"));
         }
-
-        if (!config.host) {
-            config = Config.fromEnvVars(config);
-        }
+        config = Config.fromEnvVars(config);
 
         if (!config.host) {
             if (environment.get("GITFWD_FALLBACK", "0") == "1") {
