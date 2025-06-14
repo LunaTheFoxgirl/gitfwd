@@ -12,7 +12,7 @@ int main(string[] args) {
         }
 
         if (!config.host) {
-            config = Config.fromEnvVars();
+            config = Config.fromEnvVars(config);
         }
 
         if (!config.host) {
@@ -37,13 +37,14 @@ struct Config {
     string cwd = ".";
     ushort port = 22;
 
-    static Config fromEnvVars() {
+    static Config fromEnvVars(Config existing) {
         import std.conv : to;
 
         Config result;
-        result.host = environment.get("GITFWD_HOST");
-        result.user = environment.get("GITFWD_USER");
-        result.port = environment.get("GITFWD_PORT", "22").to!ushort;
+        result.host = environment.get("GITFWD_HOST", existing.host);
+        result.user = environment.get("GITFWD_USER", existing.user);
+        result.cwd = environment.get("GITFWD_CWD", existing.cwd);
+        result.port = environment.get("GITFWD_PORT", existing.port.to!string).to!ushort;
         return result;
     }
 
